@@ -1,12 +1,18 @@
-MODPATH=${0%/*}
-APP="`ls $MODPATH/system/priv-app` `ls $MODPATH/system/app`"
-for APPS in $APP; do
-  rm -f `find /data/system/package_cache -type f -name *$APPS*`
-  rm -f `find /data/dalvik-cache /data/resource-cache -type f -name *$APPS*.apk`
+[ ! "$MODPATH" ] && MODPATH=${0%/*}
+UID=`id -u`
+
+# run
+. $MODPATH/function.sh
+
+# cleaning
+remove_cache
+PKGS=`cat $MODPATH/package.txt`
+for PKG in $PKGS; do
+  rm -rf /data/user*/"$UID"/$PKG/cache/*
 done
-PKG=`cat $MODPATH/package.txt`
-for PKGS in $PKG; do
-  rm -rf /data/user*/*/$PKGS/cache/*
-done
+
+
+
+
 
 
